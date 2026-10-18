@@ -2,11 +2,10 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, Lightbulb, Wand2, RotateCcw, MessageCircleQuestion, Sparkles, ThumbsUp, ThumbsDown, Gamepad2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Lightbulb, Wand2, RotateCcw, Sparkles, ThumbsUp, ThumbsDown, Gamepad2 } from "lucide-react";
 import { useGame } from "@/components/providers/GameProvider";
 import Lumi from "@/components/teacher/Lumi";
 import SpeechBubble from "@/components/teacher/SpeechBubble";
-import TutorChat from "@/components/teacher/TutorChat";
 import { useTutorAvailability, useAskTutor } from "@/components/teacher/useTutor";
 import Visual from "@/components/visuals";
 import Button from "@/components/ui/Button";
@@ -67,7 +66,6 @@ export default function LessonPage() {
   const [aiBusy, setAiBusy] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [reaction, setReaction] = useState(null);
-  const [chat, setChat] = useState(false);
   const [recheck, setRecheck] = useState(null);
   const [round, setRound] = useState(1);
 
@@ -162,7 +160,7 @@ export default function LessonPage() {
     const q = phase === "check" ? lesson.check : recheck;
     board = <CheckQuestion key={`${phase}-${round}`} question={q} onAnswer={(ok) => setReaction(ok)} />;
   } else if (phase === "decide") {
-    speech = round > 1 ? "Ну как, теперь понятнее? Если остались вопросы — спроси меня, я с радостью помогу!" : "Отлично поработали! Теперь скажи честно: тема понятна?";
+    speech = round > 1 ? "Ну как, теперь понятнее? Если нет — разберём тему ещё раз!" : "Отлично поработали! Теперь скажи честно: тема понятна?";
     emotion = speaking ? "talk" : "happy";
     board = (
       <div>
@@ -270,7 +268,6 @@ export default function LessonPage() {
                 </button>
               )}
             </SpeechBubble>
-            {aiEnabled === false && inExplain && <p className="mt-3 text-center text-[11px] font-bold text-slate-400">Демо: объяснения подготовлены заранее, AI-ответы недоступны без ключа API</p>}
           </div>
 
           {(inExplain || phase === "decide") && (
@@ -281,11 +278,8 @@ export default function LessonPage() {
               <button onClick={showExample} disabled={!inExplain} className={`flex items-center justify-center gap-2 rounded-2xl p-3 text-sm font-extrabold transition disabled:opacity-40 ${mode === "example" ? "bg-amber-400 text-amber-950" : "bg-white text-slate-700 ring-1 ring-slate-200 hover:ring-brand"}`}>
                 <Lightbulb size={18} /> Покажи пример
               </button>
-              <button onClick={repeatTopic} className="flex items-center justify-center gap-2 rounded-2xl bg-white p-3 text-sm font-extrabold text-slate-700 ring-1 ring-slate-200 transition hover:ring-brand">
+              <button onClick={repeatTopic} className="col-span-2 flex items-center justify-center gap-2 rounded-2xl bg-white p-3 text-sm font-extrabold text-slate-700 ring-1 ring-slate-200 transition hover:ring-brand">
                 <RotateCcw size={18} /> Повтори тему
-              </button>
-              <button onClick={() => setChat(true)} className="flex items-center justify-center gap-2 rounded-2xl bg-white p-3 text-sm font-extrabold text-slate-700 ring-1 ring-slate-200 transition hover:ring-brand">
-                <MessageCircleQuestion size={18} /> Задать вопрос
               </button>
             </div>
           )}
@@ -343,7 +337,6 @@ export default function LessonPage() {
         </section>
       </div>
 
-      <TutorChat open={chat} onClose={() => setChat(false)} lesson={lesson} grade={state.profile.grade} aiEnabled={Boolean(aiEnabled)} costume={costume} />
     </div>
   );
 }

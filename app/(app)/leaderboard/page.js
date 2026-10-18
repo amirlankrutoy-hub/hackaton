@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Search, Crown, Users, Info, EyeOff } from "lucide-react";
+import { Search, Crown, Users, EyeOff } from "lucide-react";
 import { useGame } from "@/components/providers/GameProvider";
 import { useLeaderboardEntries } from "@/components/game/useLeaderboard";
 import Avatar from "@/components/ui/Avatar";
@@ -14,7 +14,7 @@ const MEDALS = ["🥇", "🥈", "🥉"];
 
 export default function LeaderboardPage() {
   const { state } = useGame();
-  const { entries, me, error, demo } = useLeaderboardEntries();
+  const { entries, me, error } = useLeaderboardEntries();
   const [tab, setTab] = useState("global");
   const [query, setQuery] = useState("");
   const hidden = !state.profile.privacy.showInLeaderboard;
@@ -34,13 +34,6 @@ export default function LeaderboardPage() {
   return (
     <div>
       <PageHeader title="Глобальный рейтинг" subtitle="Место определяется только опытом (XP) за учёбу. Lumos и покупки не влияют." emoji="🏆" />
-
-      {demo && (
-        <div className="mb-5 flex items-start gap-3 rounded-2xl bg-amber-50 p-4 text-sm font-bold text-amber-800">
-          <Info size={18} className="mt-0.5 shrink-0" />
-          <p>Тестовые данные: в демо-режиме рейтинг заполнен вымышленными учениками (отмечены значком «демо»), чтобы показать работу таблицы. После подключения Supabase здесь будут только реальные пользователи.</p>
-        </div>
-      )}
 
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="flex gap-1.5 rounded-2xl bg-white p-1.5 shadow-sm ring-1 ring-slate-200">
@@ -121,7 +114,7 @@ export default function LeaderboardPage() {
               <span className="text-right">{tab === "weekly" ? "XP/нед." : "XP"}</span>
               <span className="hidden text-right sm:block">Уроков</span>
             </div>
-            {filtered.length === 0 && <p className="p-6 text-center font-bold text-slate-400">Никого не нашли по запросу «{query}»</p>}
+            {filtered.length === 0 && <p className="p-6 text-center font-bold text-slate-400">{q ? `Никого не нашли по запросу «${query}»` : "Пока в рейтинге никого нет"}</p>}
             {filtered.map((e) => (
               <div key={e.id} className={`grid grid-cols-[3rem_1fr_4rem_5rem] items-center gap-2 border-b border-slate-50 px-4 py-3 last:border-0 sm:grid-cols-[3.5rem_1fr_5rem_6rem_6rem] ${e.me ? "bg-brand-soft" : ""}`}>
                 <span className="font-display text-lg font-extrabold text-slate-500">{e.rank <= 3 ? <Emoji e={MEDALS[e.rank - 1]} /> : e.rank}</span>
@@ -129,7 +122,7 @@ export default function LeaderboardPage() {
                   <Avatar avatar={e.avatar} frame={e.frame} size={38} />
                   <div className="min-w-0">
                     <p className="truncate font-extrabold">
-                      {e.name} {e.me && <Badge tone="brand">Это ты</Badge>} {e.demo && <Badge tone="slate">демо</Badge>}
+                      {e.name} {e.me && <Badge tone="brand">Это ты</Badge>}
                     </p>
                     {e.username && <p className="truncate text-xs text-slate-400">@{e.username}</p>}
                   </div>

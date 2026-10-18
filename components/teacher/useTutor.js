@@ -37,13 +37,3 @@ export function useAskTutor() {
     return data.answer;
   };
 }
-
-/** Ответ без AI: ищем частый вопрос по ключевым словам. */
-export function offlineAnswer(lesson, question) {
-  const q = question.toLowerCase();
-  const hit = lesson.faq?.find((f) => f.keys.some((k) => q.includes(k.toLowerCase())));
-  if (hit) return hit.answer;
-  const step = lesson.steps.find((s) => s.title.toLowerCase().split(/\s+/).some((w) => w.length > 4 && q.includes(w.slice(0, -1))));
-  if (step) return `${step.simple}\n\nПодробнее: ${step.text}`;
-  return null;
-}

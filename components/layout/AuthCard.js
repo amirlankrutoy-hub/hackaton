@@ -1,14 +1,12 @@
 "use client";
 import Logo from "@/components/ui/Logo";
 import Lumi from "@/components/teacher/Lumi";
-import { DemoBanner } from "./AppShell";
 import { Em } from "@/components/ui/Emoji";
 
 export default function AuthCard({ title, subtitle, children, emotion = "happy" }) {
   return (
     <div className="min-h-screen">
-      <DemoBanner />
-      <div className="mx-auto grid min-h-[calc(100vh-2rem)] max-w-5xl items-center gap-8 px-4 py-8 lg:grid-cols-2">
+      <div className="mx-auto grid min-h-screen max-w-5xl items-center gap-8 px-4 py-8 lg:grid-cols-2">
         <div className="hidden flex-col items-center gap-4 text-center lg:flex">
           <Lumi emotion={emotion} size={240} />
           <p className="font-display text-2xl font-extrabold">Привет! Я Луми, твой AI-учитель.</p>

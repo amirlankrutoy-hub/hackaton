@@ -1,11 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Save, LogOut, Trash2, Database, Bot, Check } from "lucide-react";
+import { Save, LogOut, Trash2, Check } from "lucide-react";
 import { useGame } from "@/components/providers/GameProvider";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useToast } from "@/components/ui/Toast";
-import { useTutorAvailability } from "@/components/teacher/useTutor";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import { PageHeader, SectionTitle } from "@/components/ui/Misc";
@@ -33,7 +32,6 @@ export default function SettingsPage() {
   const { mode, logout, user } = useAuth();
   const toast = useToast();
   const router = useRouter();
-  const ai = useTutorAvailability();
   const p = state.profile;
   const [form, setForm] = useState({ name: p.name, username: p.username, grade: p.grade, language: p.language });
   const [saving, setSaving] = useState(false);
@@ -143,41 +141,6 @@ export default function SettingsPage() {
             );
           })}
         </div>
-      </section>
-
-      <section id="setup" className="card space-y-4 p-6">
-        <SectionTitle title="Режим работы и интеграции" />
-        <div className="flex items-start gap-3 rounded-2xl bg-slate-50 p-4">
-          <Database className="mt-0.5 shrink-0 text-brand" />
-          <div className="text-sm">
-            <p className="font-extrabold">{mode === "supabase" ? "Supabase подключён" : "Демо-режим (Supabase не подключён)"}</p>
-            <p className="text-slate-500">
-              {mode === "supabase"
-                ? "Прогресс, XP и Lumos хранятся на сервере и проверяются серверным маршрутом."
-                : "Аккаунт и прогресс хранятся только в этом браузере. Чтобы включить регистрацию, общий рейтинг и защиту начислений, подключите Supabase."}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-start gap-3 rounded-2xl bg-slate-50 p-4">
-          <Bot className="mt-0.5 shrink-0 text-brand-2" />
-          <div className="text-sm">
-            <p className="font-extrabold">{ai === null ? "Проверяем AI-учителя…" : ai ? "AI-учитель подключён (Claude)" : "AI-учитель в демо-режиме"}</p>
-            <p className="text-slate-500">{ai ? "Луми отвечает на вопросы и придумывает новые объяснения." : "Используются подготовленные объяснения и ответы на частые вопросы."}</p>
-          </div>
-        </div>
-        {(mode === "demo" || ai === false) && (
-          <div className="rounded-2xl bg-slate-900 p-4 text-sm text-slate-100">
-            <p className="mb-2 font-extrabold">Файл .env.local в корне проекта:</p>
-            <pre className="overflow-x-auto whitespace-pre text-xs leading-relaxed text-emerald-300">{`# Supabase (Project Settings → API)
-NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...   # только сервер!
-
-# AI-учитель (console.anthropic.com)
-ANTHROPIC_API_KEY=sk-ant-...`}</pre>
-            <p className="mt-2 text-xs text-slate-400">Затем выполните supabase/schema.sql и supabase/seed.sql в SQL Editor и перезапустите сервер. Подробности — в README.md.</p>
-          </div>
-        )}
       </section>
 
       <section className="card flex flex-wrap gap-3 p-6">

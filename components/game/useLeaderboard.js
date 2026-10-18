@@ -2,10 +2,9 @@
 import { useEffect, useState } from "react";
 import { useGame } from "@/components/providers/GameProvider";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { DEMO_STUDENTS } from "@/lib/demoLeaderboard";
 import { weeklyXp } from "@/lib/engine";
 
-/** Записи рейтинга: демо-ученики + я (демо) или реальные пользователи (Supabase). */
+/** Записи рейтинга: только я (демо-режим) или реальные пользователи (Supabase). */
 export function useLeaderboardEntries() {
   const { mode, getToken } = useAuth();
   const { state, stats } = useGame();
@@ -45,10 +44,10 @@ export function useLeaderboardEntries() {
   };
   if (mode === "supabase") {
     const list = remote ? remote.map((e) => (e.id === p.id ? { ...e, ...me } : e)) : null;
-    return { entries: list, me, error, demo: false };
+    return { entries: list, me, error };
   }
-  const list = [...DEMO_STUDENTS, ...(p.privacy.showInLeaderboard ? [me] : [])];
-  return { entries: list, me, error: "", demo: true };
+  const list = p.privacy.showInLeaderboard ? [me] : [];
+  return { entries: list, me, error: "" };
 }
 
 

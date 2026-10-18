@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import {
-  NotebookPen, House, GraduationCap, BookMarked, Gamepad2, Trophy, Award, ShoppingBag, Compass, User, Settings, Bell, Menu, X, LogOut, Flame, FlaskConical,
+  NotebookPen, House, GraduationCap, BookMarked, Gamepad2, Trophy, Award, ShoppingBag, Compass, User, Settings, Bell, Menu, X, LogOut, Flame,
 } from "lucide-react";
 import Logo from "@/components/ui/Logo";
 import Avatar from "@/components/ui/Avatar";
@@ -114,18 +114,6 @@ function Notifications() {
   );
 }
 
-export function DemoBanner() {
-  const { mode } = useAuth();
-  if (mode !== "demo") return null;
-  return (
-    <div className="no-print flex items-center justify-center gap-2 bg-amber-100 px-4 py-1.5 text-center text-xs font-bold text-amber-800">
-      <FlaskConical size={14} className="shrink-0" />
-      Демо-режим: Supabase не подключён, прогресс хранится только в этом браузере.
-      <Link href="/settings#setup" className="underline">Как подключить</Link>
-    </div>
-  );
-}
-
 export default function AppShell({ children }) {
   const { state, level, stats } = useGame();
   const { logout } = useAuth();
@@ -140,7 +128,6 @@ export default function AppShell({ children }) {
 
   return (
     <div className="min-h-screen">
-      <DemoBanner />
       {/* Боковое меню (десктоп) */}
       <aside className="no-print fixed inset-y-0 left-0 z-30 hidden w-64 flex-col gap-6 border-r border-slate-200/70 bg-white/80 px-4 py-6 backdrop-blur lg:flex">
         <div className="px-2">
