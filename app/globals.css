@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/* Цвета бренда задаются переменными, чтобы темы из магазина могли их менять. */
+:root {
+  --brand: #2563eb;
+  --brand-dark: #1d4ed8;
+  --brand-2: #7c3aed;
+  --brand-3: #06b6d4;
+  --brand-soft: #eff6ff;
+  --brand-tint: #dbeafe;
+  --page: #f5f8ff;
+  --ink: #0f172a;
+}
+
+[data-theme="theme-ocean"] {
+  --brand: #0891b2;
+  --brand-dark: #0e7490;
+  --brand-2: #0d9488;
+  --brand-3: #38bdf8;
+  --brand-soft: #ecfeff;
+  --brand-tint: #cffafe;
+  --page: #f2fbfd;
+}
+[data-theme="theme-sunset"] {
+  --brand: #ea580c;
+  --brand-dark: #c2410c;
+  --brand-2: #db2777;
+  --brand-3: #f59e0b;
+  --brand-soft: #fff7ed;
+  --brand-tint: #ffedd5;
+  --page: #fffaf5;
+}
+[data-theme="theme-forest"] {
+  --brand: #16a34a;
+  --brand-dark: #15803d;
+  --brand-2: #0f766e;
+  --brand-3: #84cc16;
+  --brand-soft: #f0fdf4;
+  --brand-tint: #dcfce7;
+  --page: #f6fdf8;
+}
+[data-theme="theme-cosmos"] {
+  --brand: #7c3aed;
+  --brand-dark: #6d28d9;
+  --brand-2: #4338ca;
+  --brand-3: #c026d3;
+  --brand-soft: #f5f3ff;
+  --brand-tint: #ede9fe;
+  --page: #f8f6ff;
+}
+
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-2: var(--brand-2);
+  --color-brand-3: var(--brand-3);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-tint: var(--brand-tint);
+  --color-page: var(--page);
+  --color-ink: var(--ink);
+  --font-sans: var(--font-nunito), system-ui, sans-serif;
+  --font-display: var(--font-unbounded), var(--font-nunito), system-ui, sans-serif;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-nunito), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-unbounded), var(--font-nunito), system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.bg-brand-gradient {
+  background-image: linear-gradient(135deg, var(--brand), var(--brand-2));
+}
+.text-brand-gradient {
+  background-image: linear-gradient(135deg, var(--brand), var(--brand-2) 60%, var(--brand-3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card {
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(37 99 235 / 0.18);
+  border: 1px solid rgb(226 232 240 / 0.8);
+}
+
+.btn-3d {
+  box-shadow: 0 4px 0 0 rgb(0 0 0 / 0.18);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+}
+.btn-3d:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 0 rgb(0 0 0 / 0.18);
+}
+
+/* ---------- Анимации ---------- */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+@keyframes talk {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+@keyframes glow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgb(103 232 249 / 0.7)); }
+  50% { filter: drop-shadow(0 0 12px rgb(167 139 250 / 0.9)); }
+}
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes rise {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+@keyframes fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(540deg); opacity: 0.9; }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes shine {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+@keyframes drive {
+  from { transform: translateX(0); }
+  to { transform: translateX(var(--drive-to, 300px)); }
+}
+
+.animate-float { animation: float 3.2s ease-in-out infinite; }
+.animate-blink { animation: blink 4s infinite; transform-origin: center; transform-box: fill-box; }
+.animate-talk { animation: talk 0.28s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+.animate-wiggle { animation: wiggle 0.6s ease-in-out infinite; transform-origin: bottom center; transform-box: fill-box; }
+.animate-glow { animation: glow 2.4s ease-in-out infinite; }
+.animate-pop { animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.animate-rise { animation: rise 0.4s ease-out both; }
+.animate-shake { animation: shake 0.4s ease-in-out; }
+.animate-spin-slow { animation: spin-slow 12s linear infinite; }
+.shine {
+  background-image: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.55) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shine 2.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+}
