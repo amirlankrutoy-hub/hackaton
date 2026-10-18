@@ -20,7 +20,7 @@ function GradeBadge({ grade, size = "h-10 w-10 text-lg" }) {
   return <span className={`grid shrink-0 place-items-center rounded-xl font-display font-extrabold ${size} ${GRADE_STYLE[grade]}`}>{grade}</span>;
 }
 
-function SlotRow({ slot, onLocked }) {
+function SlotRow({ slot, beforeStart, onLocked }) {
   const subject = getSubject(slot.subjectId);
   const lesson = slot.lessonId && getLesson(slot.lessonId);
   const href = slotHref(slot);
@@ -44,7 +44,7 @@ function SlotRow({ slot, onLocked }) {
     missed: (
       <span className="inline-flex h-10 items-center rounded-xl bg-slate-100 px-3 text-xs font-extrabold text-slate-500">
         <span className="sm:hidden">Пройти</span>
-        <span className="hidden sm:inline">Не пройден — можно сейчас</span>
+        <span className="hidden sm:inline">{beforeStart ? "Можно пройти сейчас" : "Не пройден — можно сейчас"}</span>
       </span>
     ),
     planned: <span className="inline-flex h-10 items-center rounded-xl bg-slate-50 px-2.5 text-xs font-extrabold text-slate-400">План</span>,
@@ -114,7 +114,7 @@ export default function DiaryPage() {
 
   const onLocked = (slot) => {
     if (slot.status === "planned") toast(`Этот урок по расписанию на ${formatShort(selected)}. Можно начать и раньше — в разделе «Уроки».`, "info");
-    else toast(`Сначала пройди урок №${slot.n - 1} — затем откроется этот.`, "info");
+    else toast(`Сначала пройди урок «${getLesson(slot.lockedBy).title}» — затем откроется этот.`, "info");
   };
 
   return (
@@ -192,13 +192,12 @@ export default function DiaryPage() {
             </h2>
             {selected > today && !day.dayOff && <span className="text-xs font-bold text-slate-400">План может измениться — расписание учитывает твой прогресс</span>}
           </div>
-          {day.beforeStart ? (
-            <div className="flex flex-col items-center gap-2 rounded-2xl bg-slate-50 p-8 text-center">
-              <Emoji e="📅" size="3rem" />
-              <p className="font-display text-lg font-bold">В этот день ты ещё не учился в EduQuest</p>
-              <p className="text-sm text-slate-500">Расписание начинается со дня регистрации.</p>
-            </div>
-          ) : day.dayOff ? (
+          {day.beforeStart && !day.dayOff && (
+            <p className="mb-2 rounded-2xl bg-sky-50 px-4 py-2.5 text-sm font-bold text-sky-800">
+              В этот день ты ещё не учился в EduQuest, но в любой урок из расписания можно зайти и сейчас.
+            </p>
+          )}
+          {day.dayOff ? (
             <div className="flex flex-col items-center gap-2 rounded-2xl bg-slate-50 p-8 text-center">
               <Emoji e="🌳" size="3rem" />
               <p className="font-display text-lg font-bold">Воскресенье — выходной!</p>
@@ -210,7 +209,7 @@ export default function DiaryPage() {
           ) : (
             <div className="divide-y divide-slate-100 overflow-hidden rounded-2xl ring-1 ring-slate-100">
               {day.slots.map((s) => (
-                <SlotRow key={s.n} slot={s} onLocked={onLocked} />
+                <SlotRow key={s.n} slot={s} beforeStart={day.beforeStart} onLocked={onLocked} />
               ))}
             </div>
           )}
